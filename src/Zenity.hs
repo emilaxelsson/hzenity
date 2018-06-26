@@ -200,7 +200,9 @@ instance CmdParam FileSelectionFlags where
     , boolParam confirmOverwrite "--confirm-overwrite"
     ]
 
--- | Flags for the 'Error' and 'Info' dialogs
+-- | Flags for the 'Error', 'Info', 'Notification' and 'Warning' dialogs
+--
+-- Note: 'noWrap' and 'noMarkup' have no effect on 'Notification' dialogs.
 --
 -- Use 'def' for default flags.
 data InfoFlags = InfoFlags
@@ -363,12 +365,12 @@ data Dialog a where
   MultiFileSelection :: FileSelectionFlags -> Dialog [FilePath]
   Info :: InfoFlags -> Dialog ()
   List :: ListType a -> ListFlags -> Matrix -> Dialog a
+  Notification :: InfoFlags -> Dialog ()
+  Warning :: InfoFlags -> Dialog ()
   -- TODO:
-  -- Notification
   -- Progress
   -- Question
   -- TextInfo
-  -- Warning
   -- Scale
   -- ColorSelection
   -- Password
@@ -461,6 +463,12 @@ zenity cfg (List (Check h) flags mat) =
   "\n" :
   "--checklist" :
   serializeParam (shiftColumns flags) ++ matrixFlags (addSelectionColumn h mat)
+zenity cfg (Notification flags) =
+  void $ callZenity cfg $ "--notification" : serializeParam flags'
+  where
+    flags' = flags {noWrap = False, noMarkup = False}
+zenity cfg (Warning flags) =
+  void $ callZenity cfg $ "--warning" : serializeParam flags
 
 
 
