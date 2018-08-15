@@ -1,5 +1,5 @@
 name:                hzenity
-version:             0.2
+version:             0.2.1
 synopsis:            Haskell interface to Zenity dialogs
 description:         This is a Haskell wrapper around the
                      <https://en.wikipedia.org/wiki/Zenity Zenity> dialog
@@ -26,7 +26,7 @@ source-repository head
 
 library
   exposed-modules:     Zenity
-  build-depends:       base >=4.10 && <4.11,
+  build-depends:       base <5,
                        containers,
                        data-default,
                        process,
