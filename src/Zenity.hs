@@ -42,7 +42,7 @@ module Zenity
   , EntryFlags (..)
   , FileSelectionFlags (..)
   , InfoFlags (..)
-  , ReturnedColumns (..)
+  , ReturnedColumn (..)
   , ListFlags (..)
   , SelectionHeader (..)
   , ListType (..)
