@@ -3,6 +3,9 @@
 
 -- | A wrapper for <https://en.wikipedia.org/wiki/Zenity Zenity> dialog boxes
 --
+-- Zenity is accessed through system calls, so it needs to be installed on the
+-- computer in order for this wrapper to work.
+--
 -- It is advised to turn on the following extensions when using this module:
 --
 -- > DuplicateRecordFields
@@ -30,6 +33,7 @@
 -- directory.
 module Zenity
   ( Text
+  , Day
   , Default (..)
 
     -- * Zenity dialogs
@@ -186,6 +190,7 @@ data FileSelectionFlags = FileSelectionFlags
   , save :: Bool -- ^ Save mode
   , confirmOverwrite :: Bool
       -- ^ Confirm file selection if file name already exists
+
   -- TODO , fileFilter :: ???
   } deriving (Eq, Show)
 
@@ -221,13 +226,13 @@ instance CmdParam InfoFlags where
     , boolParam noMarkup "--no-markup"
     ]
 
--- | What columns to return in a 'List' dialog
+-- | What column(s) to return in a 'List' dialog
 --
 -- The default value is @`Col` 1@.
 --
 -- When 'All' is specified, the columns will be separated by newline characters
 -- (@\\n@) in the result.
-data ReturnedColumns a
+data ReturnedColumn a
   = All -- ^ Return all columns
   | Col a -- ^ Return the specified column (starting from 1)
   deriving (Eq, Show, Functor)
@@ -238,7 +243,7 @@ data ReturnedColumns a
 data ListFlags = ListFlags
   { text :: Maybe Text -- ^ Dialog text
   , editable :: Bool -- ^ Allow changes to text
-  , returnColumn :: ReturnedColumns Word -- ^ What column to return
+  , returnColumn :: ReturnedColumn Word -- ^ What column(s) to return
   , hideColumn :: Maybe Word -- ^ Hide a specific column
   , hideHeader :: Bool -- ^ Hide the column headers
   } deriving (Eq, Show)
@@ -257,7 +262,7 @@ instance CmdParam ListFlags where
     , boolParam hideHeader "--hide-header"
     ]
 
--- Increase the `returnColumn` option, to cater for the first column in
+-- | Increase the 'returnColumn' option, to cater for the first column in
 -- radio/check lists
 shiftColumns :: ListFlags -> ListFlags
 shiftColumns ListFlags {..} = ListFlags
