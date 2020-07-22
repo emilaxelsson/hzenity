@@ -1,5 +1,5 @@
 name:                hzenity
-version:             0.3
+version:             0.4
 synopsis:            Haskell interface to Zenity dialogs
 description:         This is a Haskell wrapper around the
                      <https://en.wikipedia.org/wiki/Zenity Zenity> dialog

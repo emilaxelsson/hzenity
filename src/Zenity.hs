@@ -98,6 +98,7 @@ data Config = Config
   , width :: Maybe Int -- ^ Dialog width
   , height :: Maybe Int -- ^ Dialog height
   , timeout :: Maybe Int -- ^ Dialog timeout in seconds
+  , debug :: Bool -- ^ Print the system call to Zenity with flags
   }
 
 instance Default Config where
@@ -107,6 +108,7 @@ instance Default Config where
     , width = Nothing
     , height = Nothing
     , timeout = Nothing
+    , debug = False
     }
 
 data CmdFlag where
@@ -387,8 +389,7 @@ callZenity ::
   -> [String] -- ^ Additional command-line flags
   -> IO Text
 callZenity cfg flags = do
-  -- Set to `True` for logging:
-  when False $ putStrLn $ showCommandForUser "zenity" flags'
+  when (debug cfg) $ putStrLn $ showCommandForUser "zenity" flags'
   (\(_, o, _) -> o) <$> Text.readProcessWithExitCode "zenity" flags' ""
   where
     flags' = configFlags cfg ++ flags
