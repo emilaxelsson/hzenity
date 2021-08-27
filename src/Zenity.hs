@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE NoMonomorphismRestriction #-}
 
@@ -57,7 +58,6 @@ module Zenity
   ) where
 
 import Control.Monad (void, when)
-import Control.Monad.Fail (MonadFail)
 import Data.Bool (bool)
 import Data.Default (Default (..))
 import Data.String (IsString)
@@ -65,9 +65,14 @@ import Data.Text (Text)
 import Data.Time.Calendar (Day)
 import Data.Time.Format (defaultTimeLocale, parseTimeM)
 import qualified Data.Text as Text
-import Data.Word (Word)
 import qualified System.Process.Text as Text
 import System.Process (showCommandForUser)
+
+#if MIN_VERSION_base(4,13,0)
+#else
+import Control.Monad.Fail (MonadFail)
+import Data.Word (Word)
+#endif
 
 
 
